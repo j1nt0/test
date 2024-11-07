@@ -27,6 +27,8 @@ class MultipeerManager: NSObject {
     var isAdvertising = false
     var isBrowsing = false
     
+    var currentApp: String?
+    
     override init() {
         super.init()
         
@@ -119,8 +121,7 @@ extension MultipeerManager: MCSessionDelegate, MCNearbyServiceAdvertiserDelegate
     // 데이터 수신
     func session(_ session: MCSession, didReceive data: Data, fromPeer peerID: MCPeerID) {
         if let appName = String(data: data, encoding: .utf8) {
-            // 받은 앱 이름을 출력하거나 처리
-            print("Received app info: \(appName) from \(peerID.displayName)")
+            currentApp = appName
         }
     }
     

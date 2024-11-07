@@ -11,7 +11,7 @@ import AppKit
 @Observable
 class AppTrackingManager {
     var currentApp: NSRunningApplication? = nil
-    var multipeerManager: MultipeerManager?
+    var multipeerManager = MultipeerManager()
 
     init() {
         NSWorkspace.shared.notificationCenter.addObserver(
@@ -30,7 +30,7 @@ class AppTrackingManager {
 
     func handleAppChanged(app: NSRunningApplication) {
         let appName = app.localizedName ?? "Unknown App"
-        multipeerManager?.sendAppInfo(appName: appName)
+        multipeerManager.sendAppInfo(appName: appName)
     }
 
     deinit {

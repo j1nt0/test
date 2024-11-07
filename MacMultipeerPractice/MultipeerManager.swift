@@ -118,11 +118,11 @@ extension MultipeerManager: MCSessionDelegate, MCNearbyServiceAdvertiserDelegate
     
     // 데이터 수신
     func session(_ session: MCSession, didReceive data: Data, fromPeer peerID: MCPeerID) {
-            if let appName = String(data: data, encoding: .utf8) {
-                // 받은 앱 이름을 출력하거나 처리
-                print("Received app info: \(appName) from \(peerID.displayName)")
-            }
+        if let appName = String(data: data, encoding: .utf8) {
+            // 받은 앱 이름을 출력하거나 처리
+            print("Received app info: \(appName) from \(peerID.displayName)")
         }
+    }
     
     // 오류 처리
     func session(_ session: MCSession, didFailWithError error: Error) {

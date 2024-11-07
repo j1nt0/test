@@ -74,6 +74,18 @@ class MultipeerManager: NSObject {
         browser.invitePeer(peerID, to: session, withContext: nil, timeout: 30)
     }
     
+    func sendAppInfo(appName: String) {
+        let appData = appName.data(using: .utf8)
+        
+        for peerID in connectedPeers {
+            do {
+                try session.send(appData!, toPeers: [peerID], with: .reliable)
+            } catch {
+                print("Error sending app info: \(error)")
+            }
+        }
+    }
+    
     // 연결 끊기
     func disconnect() {
         // 모든 연결된 피어와의 연결 끊기
@@ -106,10 +118,11 @@ extension MultipeerManager: MCSessionDelegate, MCNearbyServiceAdvertiserDelegate
     
     // 데이터 수신
     func session(_ session: MCSession, didReceive data: Data, fromPeer peerID: MCPeerID) {
-        DispatchQueue.main.async {
-            
+            if let appName = String(data: data, encoding: .utf8) {
+                // 받은 앱 이름을 출력하거나 처리
+                print("Received app info: \(appName) from \(peerID.displayName)")
+            }
         }
-    }
     
     // 오류 처리
     func session(_ session: MCSession, didFailWithError error: Error) {
@@ -138,27 +151,6 @@ extension MultipeerManager: MCSessionDelegate, MCNearbyServiceAdvertiserDelegate
             self.foundPeers.removeAll { $0 == peerID }
         }
     }
-    
-    func advertiser(_ advertiser: MCNearbyServiceAdvertiser, didStartAdvertisingPeer peerID: MCPeerID) {
-            print("Advertising started")
-            DispatchQueue.main.async {
-                self.isAdvertising = true
-            }
-        }
-        
-        func advertiser(_ advertiser: MCNearbyServiceAdvertiser, didNotStartAdvertisingPeer error: Error) {
-            print("Advertising failed with error: \(error.localizedDescription)")
-            DispatchQueue.main.async {
-                self.isAdvertising = false
-            }
-        }
-        
-        func advertiser(_ advertiser: MCNearbyServiceAdvertiser, didStopAdvertisingPeer peerID: MCPeerID) {
-            print("Advertising stopped")
-            DispatchQueue.main.async {
-                self.isAdvertising = false
-            }
-        }
 
     // 초대 요청 수락
     func advertiser(_ advertiser: MCNearbyServiceAdvertiser, didReceiveInvitationFromPeer peerID: MCPeerID, withContext context: Data?, invitationHandler: @escaping (Bool, MCSession?) -> Void) {

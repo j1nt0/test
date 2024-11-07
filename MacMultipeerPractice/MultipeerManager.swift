@@ -11,7 +11,7 @@ import Foundation
 @Observable
 class MultipeerManager: NSObject {
     // 내 피어 ID
-    var myPeerID = MCPeerID(displayName: "dd")
+    var myPeerID = MCPeerID(displayName: "n/a") // 수정해야함!!!!!!!!!!!!!!!!!
     
     // 서비스 타입
     let serviceType = "flashlight" // 서비스 타입은 고유해야 합니다.
@@ -45,6 +45,10 @@ class MultipeerManager: NSObject {
         // 브라우저 설정
         browser = MCNearbyServiceBrowser(peer: myPeerID, serviceType: serviceType)
         browser.delegate = self
+    }
+    
+    func changePeerID(displayName: String) {
+        myPeerID = MCPeerID(displayName: displayName)
     }
     
     // 광고 시작

@@ -14,7 +14,7 @@ struct MainView: View {
     var body: some View {
         VStack {
             if vm.loginManager.isLoggedIn {
-                
+                MainMainView(vm: vm)
             } else {
                 LoginView(vm: vm)
             }
@@ -42,7 +42,7 @@ struct LoginView: View {
             
             Button {
                 vm.loginManager.saveNickname(nickname)
-                print(vm.loginManager.isLoggedIn)
+                vm.multipeerManager.changePeerID(displayName: nickname)
             } label: {
                 Text("접속")
             }

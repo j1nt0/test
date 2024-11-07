@@ -14,8 +14,11 @@ struct ContentView: View {
     var body: some View {
         VStack {
             HStack {
-                ForEach(multipeerManager.connectedPeers, id: \.self) { peer in
+                ForEach(multipeerManager.foundPeers, id: \.self) { peer in
                     Text(peer.displayName)
+                        .onTapGesture {
+                            multipeerManager.joinRoom(peerID: peer)
+                        }
                 }
             }
             HStack {
@@ -30,7 +33,11 @@ struct ContentView: View {
                     Text("찾기")
                 }
             }
-            
+            HStack {
+                ForEach(multipeerManager.connectedPeers, id: \.self) { peer in
+                    Text(peer.displayName)
+                }
+            }
         }
     }
 }
